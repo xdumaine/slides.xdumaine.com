@@ -1,9 +1,5 @@
-import Test from './test';
-
 class App {
     constructor() {
-        Test.test();
-
         $('.figure-set').each((i, figureSet) => {
             $(figureSet).find('figure:not(:first)').addClass('collapse');
             $(figureSet).find('.previous').click((i, previous) => {
