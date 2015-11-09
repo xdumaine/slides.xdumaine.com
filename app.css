@@ -22,6 +22,7 @@ header .spacer {
 }
 header {
   border: none;
+  font-family: 'Source Code Pro';
 }
 header .container {
   padding: 10px;
@@ -31,6 +32,10 @@ header .container {
   border: 1px solid #c0c0c0;
   padding: 30px;
   background: white;
+}
+.sample h4,
+.sample h5 {
+  font-family: 'Source Code Pro';
 }
 .sample.sample-small {
   padding: 15px;
