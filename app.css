@@ -1,0 +1,118 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body {
+  border: none;
+  background-image: url(https://blog.xdumaine.com/content/images/2015/11/xander-wordcloud.png);
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.body-container {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+header .spacer {
+  height: 60px;
+}
+header {
+  border: none;
+}
+header .container {
+  padding: 10px;
+  background-color: white;
+}
+.sample {
+  border: 1px solid #c0c0c0;
+  padding: 30px;
+  background: white;
+}
+.sample.sample-small {
+  padding: 15px;
+}
+@media (max-width: 750px) {
+  .sample {
+    padding: 10px;
+  }
+  .sample > figure {
+    margin: 1em 10px;
+  }
+}
+.sample .figure-set {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.sample .figure-set .previous,
+.sample .figure-set .next {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  padding: 10px;
+}
+.sample .figure-set figure {
+  max-width: 1000px;
+  max-height: 1000px;
+  margin: 0;
+  -webkit-transition: max-width 0.3s;
+          transition: max-width 0.3s;
+  overflow: hidden;
+}
+.sample .figure-set figure.collapse {
+  max-width: 0px;
+  max-height: 0px;
+  visibility: none;
+}
+.grid-flex-container .grid-flex-cell {
+  min-width: 0;
+}
+.fa-html5 {
+  color: #E44D26;
+}
+.fa-css3 {
+  color: #1572B6;
+}
+.fa-javascript {
+  color: #F0DB4F;
+  font-weight: bold;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-style: normal;
+}
+.fa-webrtc {
+  background-image: url("webrtc.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 1em;
+}
+.fa-webrtc:before {
+  content: '\A0';
+}
+.share-icons {
+  font-size: larger;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+  border-top: solid 1px #e0e0e0;
+  margin-top: 5px;
+  padding: 5px;
+  padding-bottom: 0;
+}
+@media (max-width: 750px) {
+  .share-icons a span {
+    display: none;
+  }
+}
