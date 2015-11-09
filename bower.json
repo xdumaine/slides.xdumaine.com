@@ -1,0 +1,7 @@
+{
+  "name": "es6-template",
+  "dependencies": {
+    "lodash": "~3.4.0",
+    "jquery": "~2.1.4"
+  }
+}

@@ -1,0 +1,123 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+body {
+    border: none;
+    background-image: url(https://blog.xdumaine.com/content/images/2015/11/xander-wordcloud.png);
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.body-container {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+header .spacer {
+    height: 60px;
+}
+
+header {
+    border: none;
+}
+
+header .container {
+    padding: 10px;
+    background-color: white;
+}
+
+.sample {
+    border: 1px solid #c0c0c0;
+    padding: 30px;
+    background: white;
+
+    &.sample-small {
+        padding: 15px;
+    }
+
+    @media (max-width: 750px) {
+        & {
+            padding: 10px;
+        }
+
+        & > figure {
+            margin: 1em 10px
+        }
+    }
+
+    .figure-set {
+        display: flex;
+        align-items: center;
+
+        .previous, .next {
+            flex-shrink: 0;
+            padding: 10px;
+        }
+
+        figure {
+            max-width: 1000px;
+            max-height: 1000px;
+            margin: 0;
+            transition: max-width .3s;
+            overflow: hidden;
+
+            &.collapse {
+                max-width: 0px;
+                max-height: 0px;
+                visibility: none;
+            }
+        }
+    }
+}
+
+.grid-flex-container .grid-flex-cell {
+    min-width: 0;
+}
+
+.fa-html5 {
+    color: #E44D26;
+}
+
+.fa-css3 {
+    color: #1572B6;
+}
+
+.fa-javascript {
+    color: #F0DB4F;
+    font-weight: bold;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-style: normal;
+}
+
+.fa-webrtc {
+    background-image: url("webrtc.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 1em;
+
+    &:before {
+        content: '\A0';
+    }
+}
+
+.share-icons {
+    font-size: larger;
+    display: flex;
+    justify-content: space-around;
+    border-top: solid 1px #e0e0e0;
+    margin-top: 5px;
+    padding: 5px;
+    padding-bottom: 0;
+
+    @media (max-width: 750px) {
+      a span {
+        display: none;
+      }
+    }
+}

@@ -1,0 +1,8 @@
+.idea/
+*.iml
+node_modules/
+bower_components/
+public/
+tmp/
+s
+npm-debug.log

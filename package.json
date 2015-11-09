@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "npm install && bower install && broccoli serve --port 8880"
+  },
+  "devDependencies": {
+    "broccoli": "^0.15.0",
+    "broccoli-autoprefixer": "^2.1.0",
+    "broccoli-babel-transpiler": "^4.0.1",
+    "broccoli-concat": "0.0.12",
+    "broccoli-fast-browserify": "^0.2.5",
+    "broccoli-funnel": "^0.2.3",
+    "broccoli-less-single": "^0.2.0",
+    "broccoli-merge-trees": "^0.2.1",
+    "broccoli-static-compiler": "^0.2.1"
+  }
+}
