@@ -16,6 +16,10 @@ body {
   height: 100%;
   width: 100%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.body-container > * {
+  -webkit-overflow-scrolling: touch;
 }
 header .spacer {
   height: 60px;
