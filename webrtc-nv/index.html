@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="The Future of WebRTC and ORTC">
+		<meta name="author" content="Xander Dumaine">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-markdown>
+					#The Future of WebRTC
+					##ORTC, WebRTC 1.0 & NV
+
+					Created by [Xander Dumaine](https://www.xdumaine.com) / [@xanderdumaine](https://twitter.com/xanderdumaine)
+
+					<small>Slides adapted from <a href="http://www.slideshare.net/alexpiwi5/2015-q4-webrtc-standards-update">Dr. Alex Gouaillard</a></small>
+				</section>
+				<section data-markdown>
+					## Heads Up
+					Most of this work is still in progress. Stay up to date! These updates are as of December 2015.
+
+					These slides are adapted from Dr. Alex Gouaillard from Citrix.
+				</section>
+
+				<section>
+					<section data-markdown>
+						## Review Current State
+
+						### WebRTC 0.x
+
+						### Standards, Early 2015
+						### Implemented, Late 2015
+					</section>
+
+					<section data-markdown>
+						### JSEP Overview
+
+						![jsep](http://www.html5rocks.com/en/tutorials/webrtc/basics/jsep.png)
+
+						<small>via [html5rocks](http://www.html5rocks.com/en/tutorials/webrtc/basics/jsep.png)</small>
+					</section>
+
+					<section data-markdown>
+						### Another View
+
+						![peer connection jsep](images/peerconnection.png)
+
+						An "omnipotent" Peer Connection
+					</section>
+
+					<section data-markdown>
+						### Open Questions
+
+						1. How do I handle bandwidth preferences?
+						2. How do I check fingerprint (MITM attack prevention)
+						3. How do I handle codecs and their parameters?
+						  - *Modify SDP and hope it works*
+						4. How do I know which candidate pair is being used?
+						5. How do I restrict ICE gathering?
+						6. How do I get more info about ICE failures?
+						7. How do I speed up ICE handshakes?
+						8. How do I avoid JSEP, SDP, O/A altogether?
+						  - *You can't*
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						## Object Model APIs
+
+						### ORTC and WebRTC Merge
+						### Object Model concept from ORTC
+					</section>
+
+					<section data-markdown>
+						### ORTC Big Picture
+
+						![ORTC Big Picture](http://ortc.org/wp-content/uploads/2014/08/ortc-big-picture.png)
+
+						via [ortc.org](http://ortc.org/wp-content/uploads/2014/08/ortc.html)
+					</section>
+
+					<section data-markdown>
+						### Why Object Models?
+
+						- Each Object only does one thing
+						- Each Object can be probed for capabilities in js
+						- Parameters can be get/set dynamically in js
+					</section>
+
+					<section>
+						<h3>Object Model Example - <pre>RTPSender</pre></h3>
+
+						<pre>
+  RTPSender
+  ----------------------------------------------------
+  -	MediaStreamTrack	track
+  -	DTLSTransport		transport
+  -	DTLSTransport		rtcpTransport
+  ----------------------------------------------------
+  -	Promise&lt;void&gt;	replaceTrack(track)
+  -	RTPCapabilities		getCapabilities()
+  -	Void				setParameters(RTPParameters)
+						</pre>
+
+					</section>
+
+					<section>
+						<h3>Object Model Example - <pre>DtlsTransport</pre></h3>
+
+						<pre>
+  DtlsTransport
+  ----------------------------------------------------
+  -	readonly IceTransport				transport
+  -	readonly DtlsTransportState			state
+  ----------------------------------------------------
+  -	EventHandler			onstatechange
+  -	seq&lt;ArrayBuffer&gt;	getRemoteCertificates(track)
+						</pre>
+
+					</section>
+
+					<section data-markdown>
+						### Open Questions *now*
+
+						1. How do I handle bandwidth preferences?
+						2. How do I check fingerprint (MITM attack prevention)
+						3. How do I know which candidate pair is being used?
+						4. How do I avoid JSEP, SDP, O/A?
+						5. Can I switch camera/microphone without renegotiation?
+							- *Yep. Final API in place
+						6. How do I handle codecs and their parameters?
+						7. How can I restrict ICE gathering?
+							- *You can to a limited degree; it's not ideal*
+						8. How can I speed up ICE handshakes?
+							- *You can't; not yet addressed
+					</section>
+				</section>
+
+				<section data-markdown>
+					### <pre>RTPTransceiver</pre>
+
+					- Object Model + JSEP (WebRTC + ORTC)
+					- m-lines in SDP are intrinsically bi-directional
+					- m-lines in SDP have attributes that fit neither sender/receiver object model (mid) or that would be duplicated in both
+
+					RTPTransceiver represents a combination of RTPSender and RTPReceiver with a common mid
+				</section>
+
+				<section>
+					<section data-markdown>
+						# ICE is Painful
+						- Slow - Full = 10s; Trickle = 1s+
+						- Problematic on mobile (handover, complex networks)
+					</section>
+
+					<section>
+						### ICE improvement - ideas
+
+						- Start before the call
+							- ICE pool
+							- Pre-gathering
+						- Simplify pairing/checking
+					</section>
+				</section>
+
+				<section data-markdown>
+					### Other Imrovements - Ideas
+
+					- Warmup and async all the things
+					- ICE, DTLS, media all ready before signaling
+						- Transceiver + replace track
+					- Start sending media at the same time as sending answer
+				</section>
+
+				<section>
+					<section data-markdown>
+						# Bandwidth is Painful
+
+						### Multiple streams, Simulcast, SVC
+					</section>
+
+					<section data-markdown>
+						### Multiple Streams/Tracks
+
+						- Several uploaded streams/tracks
+						- Decodable separately
+						- Bandwidth management separated
+						- App manages many connections/streams
+						- lots of ports, very high bandwidth
+					</section>
+
+					<section data-markdown>
+						### Simulcast
+
+						- Several uploaded tracks
+						- Tracks have a single source
+						- Decodable separately
+						- Smart bandwidth management possible
+						- App manages many tracks
+						- Reduced port usage with rtcp-mux/bundling
+					</section>
+
+					<section data-markdown>
+						### SVC
+						- Several tracks
+						- Tracks have a single source
+						- Not decodable separately (except base layer)
+						- Smart bandwidth management mandatory
+						- Less bandwidth, more resilience
+						- Few tracks to manage - downgrading handled on the wire
+					</section>
+
+					<section data-markdown>
+						### Reminder - Stream/Track management
+
+						- Multiple Streams/Tracks
+							- App manages many connections/streams
+						- Simulcast
+							- App manages many tracks
+						- SVC
+							- Track downgrading handled on the wire
+					</section>
+				</section>
+
+				<section data-markdown>
+					### ... and lots more
+
+					- client stream recording
+					- DOM capture
+					- Better statistics
+					- DataChannels in workers
+					- Security
+					- Audio output devices
+					- Better screen capture API
+				</section>
+
+				<section>
+					<h1>Thank You.</h1>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+        				crowd.on('question', (q) => xander.answer(q));
+					</code></pre>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'purecloud',
+				transition: 'linear',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,64 @@
+/**
+ * PureCloud theme for reveal.js.
+ *
+ * Copyright (C) 2015 Xander Dumaine, https://xdumaine.com
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+// Background of the presentation
+$backgroundColor: #0F465D;
+
+// Primary/body text
+$mainFont: 'Lato', sans-serif;
+$mainFontSize: 36px;
+$mainColor: #eee;
+
+// Headings
+$headingMargin: 0 0 20px 0;
+$headingFont: "Open Sans", Helvetica, sans-serif;
+$headingColor: #eee;
+$headingLineHeight: 0.9em;
+$headingLetterSpacing: 0.02em;
+$headingTextTransform: none;
+$headingTextShadow: 0px 0px 6px rgba(0,0,0,0.2);
+$heading1TextShadow: $headingTextShadow;
+
+// Links and actions
+$linkColor: #13DAEC;
+$linkColorHover: lighten( $linkColor, 20% );
+
+// Text selection
+$selectionBackgroundColor: #FF5E99;
+$selectionColor: #fff;
+
+// Include theme-specific fonts
+@font-face {
+	font-family: '"Open Sans", Helvetica, sans-serif';
+	font-weight: normal;
+	font-style: normal;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
+
+// Override theme settings (see ../template/settings.scss)
+$heading1TextShadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 20px 20px rgba(0,0,0,.15);
+
+// Background generator
+@mixin bodyBackground() {
+	background-image: url(../inin.png);
+	background-repeat: no-repeat;
+	background-position-x: 10px;
+	background-position-y: calc(100% - 10px);
+	background-size: 100px;
+}
+
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
