@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "grunt test",
-    "start": ""
+    "start": "sass --watch css/theme/source:css/theme"
   },
   "dependencies": {
     "underscore": "~1.5.1",
