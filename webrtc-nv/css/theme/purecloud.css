@@ -4,6 +4,8 @@
  * Copyright (C) 2015 Xander Dumaine, https://xdumaine.com
  */
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
 @font-face {
   font-family: '"Open Sans", Helvetica, sans-serif';
   font-weight: normal;
@@ -42,7 +44,7 @@ body {
 .reveal h6 {
   margin: 0 0 20px 0;
   color: #eee;
-  font-family: "Open Sans", Helvetica, sans-serif;
+  font-family: "Montserrat", sans-serif;
   line-height: 0.9em;
   letter-spacing: 0.02em;
   text-transform: none;
