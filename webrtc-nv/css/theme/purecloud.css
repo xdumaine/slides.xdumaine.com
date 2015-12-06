@@ -12,7 +12,7 @@
  * GLOBAL STYLES
  *********************************************/
 body {
-  background-image: url(../inin.png);
+  background-image: url(inin.png);
   background-repeat: no-repeat;
   background-position-x: 10px;
   background-position-y: calc(100% - 10px);
