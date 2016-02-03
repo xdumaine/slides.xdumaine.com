@@ -15,6 +15,11 @@
   background: none;
   box-shadow: none; }
 
+.reveal section[data-iframe] {
+  height: 600px; }
+  .reveal section[data-iframe] iframe {
+    height: 600px; }
+
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
