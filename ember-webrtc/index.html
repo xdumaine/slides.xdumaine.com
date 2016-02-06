@@ -68,15 +68,20 @@
 					</section>
 					<section data-markdown>
 						#### Changing the Native API Paradigm
-						Highly complex, discrete and continuous event based, stateful objects
+						Highly complex,
+
+						discrete and continuous event based,
+
+						stateful objects
 
 						![flow](https://cloud.githubusercontent.com/assets/833911/12866579/8860910e-cca0-11e5-8458-32f403172459.png)
 					</section>
 				</section>
 				<section>
 					<section data-markdown>
-						## Gotcha!
-						### Quirks and obstacles for Ember apps with WebRTC
+						### Gotcha!
+						#### Quirks and obstacles for
+						#### Ember apps with WebRTC
 
 						- Rerendered DOM
 						- Ember apps are long lived
@@ -89,6 +94,22 @@
 						<h4>HTML5 Video Quirk</h4>
 						<script async src="https://jsfiddle.net/xdumaine/rb695tuL/embed/result/dark/"></script>
 						<a href="https://code.google.com/p/chromium/issues/detail?id=382879">Chrome Bug</a>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						### Layers of concern
+
+						- Session Manager
+							- Normalizes browser APIs and native events
+						- Service
+							- Create Session Manager
+							- Manage signaling channel connection
+							- Tie session state and state transitions to application
+							- Acts as event bus and gateway
+						- Components
+							- Render/Interact
+							- Manage UI state (!)
 					</section>
 				</section>
 				<section>
