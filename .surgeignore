@@ -1,2 +1,5 @@
-bower_components/*
-node_modules/*
+.git
+.*
+*.*~
+node_modules
+bower_components
