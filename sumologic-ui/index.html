@@ -61,10 +61,12 @@
 					<section data-markdown>
 						## Why Log?
 
-						- "Can you open your console and see if there any errors?" isn't sustainable
+						- "Can you open your console and see if there any errors?" does not scale
 						- Catch errors in the wild, with different browsers/versions
 						- Catch regressions in services causing UI problems
 						- Track problems accross app versions
+						- Gradually increase robustness
+						- A metric of where you need more unit testing
 					</section>
 
 					<section data-markdown>
@@ -80,15 +82,21 @@
 
 						- Errors: Handled/unhandled/ajax
 						- Warnings: Potential problems
-						- Critical trace level logs (e.g., WebRTC or WebSocket connections established)
+						- Critical trace level logs
+							- WebRTC or WebSocket connections established
 					</section>
 
 					<section data-markdown>
 						## What Not to Log
 
 						- Logs != analytics
-						- Deprecations
+							- Repetitive actions
+							- button clicks/navigations
+							- client/browser metadata
+						- ePHI
 						- Useless/Debug level logs
+							- UI load/bootstrap events
+							- Deprecations
 					</section>
 				</section>
 
@@ -96,36 +104,164 @@
 					<section data-markdown>
 						## Logging API
 						### (PureCloud Public API)
+
+						`platform/api/v1/diagnostics/trace`
+
+						```javascript
+						{
+							"app": { "appId": "your-app-id" },
+							"traces": [
+								{
+									"level": "warn",
+									"message": "your-message-or-json-string",
+									"time": "time-error-occurred",
+									"topic": "your-application-context"
+								}
+							]
+						}
+						```
 					</section>
 
 					<section data-markdown>
-						## Recommended Metadata
+						## Logging API
+						### (PureCloud Public API)
+
+						`platform/api/v1/diagnostics/trace`
+
+						```javascript
+						{
+							"app": { "appId": "collaborate-ui" },
+							"traces": [
+								{
+									"level": "warn",
+									"message": "{\"log\":[{\"name\":\"SyntaxError\",\"message\":\"Unexpected token o in JSON at position 1\"}]}",
+									"time": "2016-08-02T14:55:35.455Z",
+									"topic": "client.collaborate-ui.component:linkedin-import"
+								}
+							]
+						}
+						```
+					</section>
+
+					<section data-markdown>
+						## Metadata to Consider
+
+						- Client JID
+						- User email
+						- Related Conversation Id
 					</section>
 
 					<section data-markdown>
 						## Automatic Metadata
+
+						- User Agent
+						- Org guid
+						- User guid
 					</section>
 
 					<section data-markdown>
 						## Limits
+						- 1 request per second
+						- 15kB per request
+
+						Multiple logs can be included in a single request, but watch
+						out for the 15kB limit
 					</section>
 				</section>
 
 				<section>
 					<section data-markdown>
 						## Web Client Strategies
+
+						- Global application logger
+						- Automatic log context
+						- Stash logger - stashing and purging
+						- Levels, [black|white]listing
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						## Application Logger
+
+						- Handles uncaught exceptions
+							```javascript
+							window.onerror
+							```
+						- Attaches metadata and context
+						- Proxies to stash logger
 					</section>
 
 					<section data-markdown>
 						## Application Logger
+						### Example
+
+						```javascript
+						stashLogger = globalStashLoggerForYourApplication;
+						window.onerror = function () {
+							stashLogger.error(...arguments);
+							return true; // stash logger will handle and log it
+						};
+						```
 					</section>
 
 					<section data-markdown>
-						## Exponential backoff - 1/(2^n)
+						## Application Logger
+						### Example
+
+						`app/services/worker.js`
+						```javascript
+						// LoggerMixin is a utility that looks up the stash logging
+						// instance, and attaches context metadata (topic)
+						import LoggerMixin from '../utils/mixins/logger-mixin';
+						export default Ember.Service.extend(LoggerMixin, {
+							doSomeWork() {
+								this.doAjaxWork()
+									.then(() => this.handleWork)
+									.catch((err) => {
+										this.logger.error('Failed to handle work', err);
+										this.setError();
+									});
+							}
+						});
+						// log will automatically have topic: client.my-application.service:worker
+						```
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						## Limiting traces logged
+						- Stash logger limits levels generically
+						- Increase log level by topic (whitelist)
+						- Decrease/remove log level by topic (blacklist)
 					</section>
 
 					<section data-markdown>
-						## Log levels, whitelisting, blacklisting
+						## Exponential backoff
+						### good, generic strategy
+						Send your log traces, then:
+
+						- on 413, cut traces in half
+							- 1/2ⁿ traces sent per request
+						- on 429, cut frequency in half
+							- 1/2ⁿ requests per second
+							- 2ⁿ seconds between request
+					</section>
+
+					<section data-markdown>
+						## Limit backoff
+						### better, a priori strategy
+						- Limit your traces to ⩽ the API size limit per request
+						- Make requests at ⩽ the API rate limit per request
+					</section>
+
+					<section data-markdown>
+						## Exponential limit backoff
+						### best of both worlds strategy
+						- Limit your traces to ⩽ the API size limit per request
+						- Make requests at ⩽ the API rate limit per request
+						- Exponentially backoff both for failure tolerance
 					</section>
 				</section>
 
@@ -141,24 +277,94 @@
 				<section>
 					<section data-markdown>
 						## Finding your Logs
+
+						https://help.sumologic.com/Search
 					</section>
 
 					<section data-markdown>
 						## Environments
+						- One account
+						- DCA/TCA/SCA, Special access for Prod
+						```
+						where env = "dev|test|stage|prod"
+						```
 					</section>
 
 					<section data-markdown>
 						## Time ranges
+						- Narrow down to find specific events
+						- Broaden to find trends or spikes
 					</section>
+
+					<section data-markdown>
+						## You Try It
+
+						- Find all logs
+							- In the past 3 days
+							- In the "collaborate-ui" app
+							- in SCA
+							- Errors
+							- Matching "Cannot read property (.*) of undefined"
+					</section>
+
+					<section data-markdown>
+						## You Try It
+						```
+						app = "collaborate-ui" and
+						(level = "ERROR" or level = "WARN")
+						| parse regex "Cannot read property (?&lt;prop&gt;.*?) of undefined"
+						| where env matches "stage"
+						```
+						or
+						```
+						app = "collaborate-ui" and
+						(level = "ERROR" or level = "WARN") and
+						_sourcecategory = "public_api_clients-stage" and
+						"Cannot read property" and "of undefined"
+						```
+					</section>
+
 				</section>
 
 				<section>
 					<section data-markdown>
 						## Groking your logs
+						- Parse JSON
+						- Counts
+						- Aggregates
+						- time slices
+						- dashboards
 					</section>
 
 					<section data-markdown>
-						## Aggregates
+						### Example
+
+						Most frequent errors or warnings
+						```
+						app = "collaborate-ui" and
+						(level = "ERROR" or level = "WARN")
+						| json field=_raw "message"
+						| json field=message "log[0].message" as errMsg
+						| where env matches "stage"
+						| count by errmsg
+						| sort by _count
+						```
+					</section>
+
+					<section data-markdown>
+						### Example
+						Average packet loss over time (every minute)
+						```
+						_sourcecategory="public_api_clients-stage" and "collaborate-ui"
+						| json "message"
+						| json field=message
+						    "log[0].webrtcStats.tracks[1].loss",
+						    "log[0].webrtcStats.tracks[1].kind"
+						  as packetLoss, kind
+						| where (kind = "video")
+						| timeslice 1m
+						| avg(packetLoss) by _timeslice
+						```
 					</section>
 				</section>
 
