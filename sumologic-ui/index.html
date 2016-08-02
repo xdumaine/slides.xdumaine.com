@@ -266,6 +266,17 @@
 				</section>
 
 				<section data-markdown>
+					## Purging
+					### Goal: Inbox 0
+
+					- Logs build client memory usage
+					- Delay in sending means potential for loss
+					- Get logs to the server ASAP
+					- Purge logs from memory ASAP
+					- Pure logs on on generic errors from logging service (400, 500)
+				</section>
+
+				<section data-markdown>
 					## Review
 
 					- Use global application logger util
@@ -291,9 +302,60 @@
 					</section>
 
 					<section data-markdown>
+						## Quick filter Fields
+
+						```
+						env = "prod"
+						app = "your-app-id"
+						organization = "org-guid"
+						user = "user-guid"
+						logger = "your-log-topic"
+						source_category="service-env"
+						level = "error"
+						```
+					</section>
+
+					<section data-markdown>
 						## Time ranges
 						- Narrow down to find specific events
 						- Broaden to find trends or spikes
+					</section>
+
+					<section data-markdown>
+						## You Try It
+
+						- Find all logs
+							- In the past 3 hours
+							- Associated with your SCA user
+							- from the donut service
+					</section>
+
+					<section data-markdown>
+						## You Try It
+						```
+						user = "cc052c93-fc68-4dee-83ee-36863dc264af" and
+						_sourcecategory = "donut-stage"
+						```
+					</section>
+
+					<section data-markdown>
+						## You Try It
+
+						- Find The Most frequent log messages
+							- In the past 3 hours
+							- Associated with your SCA user
+							- from the donut service
+					</section>
+
+					<section data-markdown>
+						## You Try It
+						```
+						user = "cc052c93-fc68-4dee-83ee-36863dc264af" and
+						_sourcecategory = "donut-stage"
+						| json "message" as msg
+						| count by msg
+						| sort by _count
+						```
 					</section>
 
 					<section data-markdown>
@@ -323,7 +385,6 @@
 						"Cannot read property" and "of undefined"
 						```
 					</section>
-
 				</section>
 
 				<section>
