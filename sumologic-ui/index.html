@@ -322,6 +322,20 @@
 					</section>
 
 					<section data-markdown>
+						## Aggregates
+
+						```
+						| json field=name "jsonProp" as newField
+
+						| count by field
+
+						| sort by _count
+
+						| avg(field), min(field), max(field)
+						```
+					</section>
+
+					<section data-markdown>
 						## You Try It
 
 						- Find all logs
