@@ -72,8 +72,8 @@
 					<section data-markdown>
 						## Why Not Log?
 
-						- Client logs == increased https traffic
-						- Cached/buffered logs == increased client memory
+						- Client logs → increased https traffic
+						- Cached/buffered logs → increased client memory
 						- You're not *using* the logs
 					</section>
 
@@ -89,7 +89,7 @@
 					<section data-markdown>
 						## What Not to Log
 
-						- Logs != analytics
+						- Logs ≠ analytics
 							- Repetitive actions
 							- button clicks/navigations
 							- client/browser metadata
@@ -273,7 +273,7 @@
 					- Delay in sending means potential for loss
 					- Get logs to the server ASAP
 					- Purge logs from memory ASAP
-					- Pure logs on on generic errors from logging service (400, 500)
+					- Pure logs on on generic errors from logging service (`400`, `500`)
 				</section>
 
 				<section data-markdown>
@@ -305,13 +305,14 @@
 						## Quick filter Fields
 
 						```
-						env = "prod"
-						app = "your-app-id"
-						organization = "org-guid"
-						user = "user-guid"
-						logger = "your-log-topic"
-						source_category="service-env"
-						level = "error"
+						env = "prod"                            level = "error"
+
+						user = "user-guid"                      logger = "your-log-topic"
+
+						organization = "org-guid"               app = "your-app-id"
+
+
+						source_category = "service-env"
 						```
 					</section>
 
