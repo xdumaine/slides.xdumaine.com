@@ -10,6 +10,15 @@
   font-family: '"Open Sans", Helvetica, sans-serif';
   font-weight: normal;
   font-style: normal; }
+
+.reveal section[data-img] img {
+   border: none;
+   background: none;
+   box-shadow: none; }
+
+.reveal section[data-img-inline] img {
+   	margin: 0;
+   	margin-bottom: -17px }
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
