@@ -19,6 +19,10 @@
 .reveal section[data-img-inline] img {
    	margin: 0;
    	margin-bottom: -17px }
+
+.reveal pre code {
+    -webkit-filter: invert(1);
+}
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
