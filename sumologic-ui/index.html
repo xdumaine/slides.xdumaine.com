@@ -217,7 +217,7 @@
 						export default Ember.Service.extend(LoggerMixin, {
 							doSomeWork() {
 								this.doAjaxWork()
-									.then(() => this.handleWork)
+									.then(this.handleWork)
 									.catch((err) => {
 										this.logger.error('Failed to handle work', err);
 										this.setError();
