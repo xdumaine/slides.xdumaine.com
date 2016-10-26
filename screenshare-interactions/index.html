@@ -73,6 +73,38 @@
 				  </section>
 				  <section>
 					  <section data-markdown>
+							#### Conversation service review
+
+							- Conversation service processes kafka events to know about communication changes.
+							- Provider services have a specific event type, but all have a ProviderEvent field with common fields.
+							- A field "sourceCommunicationId" was added for this project.
+					  </section>
+					  <section data-markdown>
+							#### Now three possibilities when processing a provider event
+
+							- Brand new `communicationId` means a new communication on a new participant on the conversation
+							- Known `communicationId` is an update on state
+							- New `communicationId` with a `sourceCommunicationId` means a new communication on an existing participant who has the given `communicationId`
+					  </section>
+					  <section data-markdown>
+							#### Realtime and cobrowse support exists
+
+							Since the field was added to ProviderEvent, every media type can use it.
+							If a provider service is updated to provide the correct sourceCommunicationId, we can handle and model:
+
+							  - a video added to a call
+							  - an call added to a tweet
+							  - a co-browse session added to a co-browse session
+					  </section>
+					  <section data-markdown>
+							#### Adding a screen share to a phone call in the backend
+
+							These Ids need to be present when a customer starts a screen share to know conversationId and sourceCommunicationId
+							Conversation service stores a mapping between a six digit number and the Ids scoped per org
+					  </section>
+				  </section>
+				  <section>
+					  <section data-markdown>
 						  ### Security Keys
 						  1. Voice interaction already in progress
 						  2. Agent initiates screen share, user navigates to screen share connector page
