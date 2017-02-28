@@ -6,7 +6,7 @@ body {
 }
 body {
   border: none;
-  background-image: url(https://blog.xdumaine.com/content/images/2015/11/xander-wordcloud.png);
+  background-color: #009688;
   background-size: cover;
   height: 100%;
   width: 100%;
@@ -27,11 +27,18 @@ header .spacer {
 }
 header {
   border: none;
-  font-family: 'Source Code Pro';
+  font-family: 'Lato', sans-serif;
 }
 header .container {
   padding: 10px;
   background-color: white;
+}
+a {
+    color: #006d63;
+}
+
+a:hover {
+    color: #
 }
 .sample {
   border: 1px solid #c0c0c0;
@@ -42,9 +49,11 @@ header .container {
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
 }
+header h3,
 .sample h4,
 .sample h5 {
-  font-family: 'Source Code Pro';
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
 }
 .sample.sample-small {
   padding: 15px;
@@ -101,6 +110,11 @@ header .container {
 }
 .grid-flex-container .grid-flex-cell {
   margin: 15px;
+  transition: 0.3s all;
+}
+.grid-flex-container .grid-flex-cell:hover {
+    translate: 0px -5px;
+    box-shadow: 0px 3px 10px;
 }
 @media (max-width: 750px) {
   .grid-flex-container .grid-flex-cell {
