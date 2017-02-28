@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+    transition: 0.2s all;
+}
 html,
 body {
   margin: 0;
@@ -62,20 +66,19 @@ header h3,
       -ms-flex: 1 1 calc(50% - 30px);
           flex: 1 1 calc(50% - 30px);
 }
-@media (max-width: 320px) {
+.sample.sample-small > figure {
+    margin: 1em 10px;
+}
+
+@media (max-width: 750px) {
+  .sample {
+    padding: 10px;
+  }
   .sample.sample-small {
     -webkit-box-flex: 1;
     -webkit-flex: 1 1 auto;
         -ms-flex: 1 1 auto;
             flex: 1 1 auto;
-  }
-}
-@media (max-width: 750px) {
-  .sample {
-    padding: 10px;
-  }
-  .sample > figure {
-    margin: 1em 10px;
   }
 }
 .sample .figure-set {
