@@ -82,6 +82,13 @@ body a {
     color: #337ab7;
 }
 
+html:-webkit-full-screen-ancestor {
+  background-color: inherit; }
+
+html:-moz-full-screen-ancestor {
+  background-color: inherit; }
+
+
 .reveal a:not(.image):hover {
   color: #ff4f1f;
   text-shadow: none;

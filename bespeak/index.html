@@ -174,10 +174,6 @@
       orgName: 'callbackshackathonteam',
       queueName: 'hackathon',
       logLevel: 'DEBUG',
-      queues: [
-          'Sales,sales,18008675309',
-          'Support,support,18008675308'
-      ],
       data: {
         firstName: 'Jane',
       },
@@ -251,7 +247,7 @@
   };
 
   const toggleHelp = function (evt) {
-    evt.preventDefault();
+    evt && evt.preventDefault();
     widgetContainer.style.color = getComputedStyle(widgetButton).color;
     if (!formLoaded) {
       showHelp();
@@ -314,7 +310,7 @@
 .purecloud--widget-container {
   position: fixed;
   right: 0px;
-  top: 50%;
+  top: 30%;
   z-index: 999999999;
 }
 
