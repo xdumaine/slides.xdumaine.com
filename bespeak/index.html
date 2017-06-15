@@ -136,7 +136,210 @@
 				]
 			});
 
+(function () {
+  const log = function () {
+    console.log('[PureCloud Widgets]', ...arguments);
+  };
+  let formLoaded = false;
+
+  let containerEl;
+
+  const script = document.createElement('script');
+  script.setAttribute('src', 'https://mypurecloud.screenshare.website/jsapi-v1.js');
+  //script.setAttribute('src', 'https://apps.inindca.com/webchat/jsapi-v1.js');
+  script.setAttribute('type', 'text/javascript');
+  document.head.appendChild(script);
+
+  const resizeIframe = function (evt) {
+    containerEl.style.width = '600px';
+  }
+
+  const resizeIframeHeight = function (evt) {
+    containerEl.style.height = '375px';
+  }
+
+  const showHelp = function () {
+    log('triggering form');
+
+    const telLink = document.querySelector('[href^="tel"]');
+    const detectedPhone = telLink && telLink.href.replace('tel:', '');
+
+    const config = window.callbackConfig || {
+      webchatAppUrl: 'https://mypurecloud.screenshare.website',
+      webchatServiceUrl: 'https://realtime.inindca.com:443',
+      orgId: '1102695',
+      orgGuid: 'aec43d65-f377-4653-80b8-ac5296107704',
+      queueId: 'ef6b3aa0-dc35-4cca-961f-59a5f18f5cd3',
+      phoneNumber: detectedPhone || '1.800.867.5309',
+      orgName: 'callbackshackathonteam',
+      queueName: 'hackathon',
+      logLevel: 'DEBUG',
+      queues: [
+          'Sales,sales,18008675309',
+          'Support,support,18008675308'
+      ],
+      data: {
+        firstName: 'Jane',
+      },
+      callbackData: {
+        userName: 'Jane Customer',
+        phone: '7408565809'
+      },
+      welcomeMessage: 'Please wait while we connect you to one of our agents.',
+      componayLogo: {
+          width: 600,
+          height: 149,
+          url: 'https://dhqbrvplips7x.cloudfront.net/webchat/1.0.23/company-logo-large-cea5ee47.png'
+      },
+
+        // Logo used within the chat window
+        "companyLogoSmall": {
+            "width": 149,
+            "height": 149,
+            "url": "https://dhqbrvplips7x.cloudfront.net/webchat/1.0.23/company-logo-small-9c9fe09b.png"
+        },
+
+        // Image used for agent
+        "agentAvatar": {
+            "width": 462,
+            "height": 462,
+            "url": "https://dhqbrvplips7x.cloudfront.net/webchat/1.0.23/agent-e202505f.png"
+        },
+    };
+
+    window.callbackConfig = config;
+
+    window.ININ.callback.create(config, function (err, callback) {
+      log('Created callback', ...arguments);
+      if (err) {
+        log('Failed to create callback form');
+        return;
+      }
+
+      formLoaded = true;
+
+      if (containerEl) {
+        containerEl.remove();
+      }
+      containerEl = document.createElement('div');
+      containerEl.setAttribute('class', 'purecloud--callback-frame');
+      widgetContainer.appendChild(containerEl);
+
+      callback.renderForm({ containerEl }, function (err, frame) {
+          frame.addEventListener('load', resizeIframe.bind(null, frame));
+      });
+
+      window.addEventListener('message', handleWidgetMessage);
+    });
+  };
+
+  const handleWidgetMessage = function (message) {
+    if (!message || !message.data || message.data.type !== 'WIDGET_STATE') {
+      return;
+    }
+    switch (message.data.message) {
+        case 'CLOSE':
+            return hideHelp();
+        case 'CHAT_OPEN':
+            return resizeIframeHeight();
+    }
+  }
+
+  const hideHelp = function () {
+    containerEl && containerEl.remove();
+    formLoaded = false;
+  };
+
+  const toggleHelp = function (evt) {
+    evt.preventDefault();
+    widgetContainer.style.color = getComputedStyle(widgetButton).color;
+    if (!formLoaded) {
+      showHelp();
+    } else {
+      hideHelp();
+    }
+  };
+
+  const handleKeyDown = function (e) {
+    if (e.code === 'Escape') {
+      toggleHelp();
+    }
+
+    if (!formLoaded && e.altKey && e.code === 'KeyC') {
+      showHelp();
+    }
+  };
+
+  const font = document.createElement('link');
+  font.setAttribute('rel', 'stylesheet');
+  font.setAttribute('href', 'https://fonts.googleapis.com/css?family=Lato:300,400');
+  font.setAttribute('type', 'text/css');
+  (document.head || document.documentElement).appendChild(font);
+
+  const widgetContainer = document.createElement('div');
+  widgetContainer.setAttribute('class', 'purecloud--widget-container');
+  const widgetButton = document.createElement('a');
+  widgetButton.setAttribute('href', '#');
+  widgetButton.setAttribute('class', 'purecloud--widget-button');
+  widgetButton.innerText = 'Help';
+  widgetButton.onclick = toggleHelp;
+  widgetContainer.appendChild(widgetButton);
+  document.body.appendChild(widgetContainer);
+
+  widgetContainer.style.color = getComputedStyle(widgetButton).color;
+
+  window.addEventListener('keydown', handleKeyDown);
+
+  log('Content Script Loaded');
+})();
+
+
 		</script>
+
+		<style>
+		.purecloud--callback-frame {
+  width:0px;
+  height: 150px;
+  border: 1px solid;
+  border-right: none;
+  transition: 0.3s all;
+}
+
+.purecloud--callback-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.purecloud--widget-container {
+  position: fixed;
+  right: 0px;
+  top: 50%;
+  z-index: 999999999;
+}
+
+.purecloud--widget-button {
+  font-family: 'Lato',Arial,"Helvetica Neue",Helvetica,sans-serif!important;
+  font-weight: 300;
+  transform: rotateZ(270deg);
+  background-color: #fcfdff;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 4px;
+  font-size: 20px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  position: absolute;
+  left: -41px;
+  top: 9px;
+  height: 25px;
+  font-family: Arial;
+  letter-spacing: initial;
+  text-decoration: none!important;
+}
+
+</style>
 
 	</body>
 </html>
